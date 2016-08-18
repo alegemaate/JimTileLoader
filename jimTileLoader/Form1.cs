@@ -16,7 +16,7 @@ using System.Xml.Linq;
 
 namespace jimTileLoader
 {
-    public partial class Form1 : Form
+    public partial class jimTileForm : Form
     {
         // Holds tiles
         List<tile> allTiles;
@@ -27,7 +27,7 @@ namespace jimTileLoader
         // Index of the selected
         int selected_index = -1;
 
-        public Form1()
+        public jimTileForm()
         {
             InitializeComponent();
             

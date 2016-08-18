@@ -1,6 +1,6 @@
 ﻿namespace jimTileLoader
 {
-    partial class Form1
+    partial class jimTileForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(jimTileForm));
             this.lblAttributeText = new System.Windows.Forms.Label();
             this.lbTileSelect = new System.Windows.Forms.ListBox();
             this.lblNameTitle = new System.Windows.Forms.Label();
@@ -312,14 +313,14 @@
             // loadXMLToolStripMenuItem
             // 
             this.loadXMLToolStripMenuItem.Name = "loadXMLToolStripMenuItem";
-            this.loadXMLToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.loadXMLToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loadXMLToolStripMenuItem.Text = "Load XML";
             this.loadXMLToolStripMenuItem.Click += new System.EventHandler(this.loadXMLToolStripMenuItem_Click);
             // 
             // loadTilesetToolStripMenuItem
             // 
             this.loadTilesetToolStripMenuItem.Name = "loadTilesetToolStripMenuItem";
-            this.loadTilesetToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.loadTilesetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loadTilesetToolStripMenuItem.Text = "Load Tileset";
             // 
             // saveXMLToolStripMenuItem
@@ -348,7 +349,7 @@
             // 
             this.ofdOpenFile.FileName = "tiles.xml";
             // 
-            // Form1
+            // jimTileForm
             // 
             this.ClientSize = new System.Drawing.Size(390, 189);
             this.Controls.Add(this.gbBasic);
@@ -358,9 +359,11 @@
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.lbTileSelect);
             this.Controls.Add(this.menuStrip1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "jimTileForm";
+            this.Text = "Jim Tile Loader";
             ((System.ComponentModel.ISupportInitialize)(this.nudWidth)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudHeight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudImgCoordY)).EndInit();
