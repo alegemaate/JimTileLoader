@@ -33,6 +33,9 @@ namespace jimTileLoader
             
             // Load our image
             tileSet = new Bitmap("images/tiles.png");
+
+            // New list
+            allTiles = new List<tile>();
         }
 
         // Check if ID value is used already
@@ -47,13 +50,6 @@ namespace jimTileLoader
 
             // No match!
             return true;
-        }
-
-
-        // Load the xml file
-        private void btnLoadXML_Click(object sender, EventArgs e)
-        {
-            
         }
 
         // Select something else from the list
@@ -231,49 +227,45 @@ namespace jimTileLoader
             // No red nudID
             nudID.BackColor = Color.White;
 
-            // Our container for the xml document
-            // Load from a static location (for now)
-            XDocument xdoc = XDocument.Load(fileToOpen);
-
-            // Number of tiles
-            int count = xdoc.Descendants("tile").Count();
-
-            // Make the array if it doesnt exist
-            if (allTiles == null)
+            // Make sure its loading
+            if (fileToOpen != "null")
             {
-                allTiles = new List<tile>();
-            }
-            // Clear the items from list box
-            else
-            {
+                // Our container for the xml document
+                // Load from a static location (for now)
+                XDocument xdoc = XDocument.Load(fileToOpen);
+
+                // Number of tiles
+                int count = xdoc.Descendants("tile").Count();
+
+                // Clear list
                 lbTileSelect.Items.Clear();
-            }
 
-            // Load data into all tiles
-            int counter = 0;
-            foreach (XElement item in xdoc.Descendants("tile"))
-            {
-                // New tile
-                tile newTile = new tile();
+                // Load data into all tiles
+                int counter = 0;
+                foreach (XElement item in xdoc.Descendants("tile"))
+                {
+                    // New tile
+                    tile newTile = new tile();
 
-                // Set vals
-                newTile.name = item.Element("name").Value.ToString();
-                newTile.attribute = item.Element("attrubite").Value.ToString();
+                    // Set vals
+                    newTile.name = item.Element("name").Value.ToString();
+                    newTile.attribute = item.Element("attrubite").Value.ToString();
 
-                newTile.img_x = Int32.Parse(item.Element("images").Element("image_x").Value.ToString());
-                newTile.img_y = Int32.Parse(item.Element("images").Element("image_y").Value.ToString());
-                newTile.img_w = Int32.Parse(item.Element("images").Element("image_w").Value.ToString());
-                newTile.img_h = Int32.Parse(item.Element("images").Element("image_h").Value.ToString());
-                newTile.id = Int32.Parse(item.Attribute("id").Value);
+                    newTile.img_x = Int32.Parse(item.Element("images").Element("image_x").Value.ToString());
+                    newTile.img_y = Int32.Parse(item.Element("images").Element("image_y").Value.ToString());
+                    newTile.img_w = Int32.Parse(item.Element("images").Element("image_w").Value.ToString());
+                    newTile.img_h = Int32.Parse(item.Element("images").Element("image_h").Value.ToString());
+                    newTile.id = Int32.Parse(item.Attribute("id").Value);
 
-                // Make new item for list box
-                lbTileSelect.Items.Add(newTile.name);
+                    // Make new item for list box
+                    lbTileSelect.Items.Add(newTile.name);
 
-                // Add to list
-                allTiles.Add(newTile);
+                    // Add to list
+                    allTiles.Add(newTile);
 
-                // Inc counter
-                counter++;
+                    // Inc counter
+                    counter++;
+                }
             }
         }
 
@@ -281,7 +273,46 @@ namespace jimTileLoader
         // Message box to show about
         private void aboutJimTileLoaderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Windows.Forms.MessageBox.Show("Jim Tile Loader for Jim Farm \n Created by Allan Legemaate 2016");
+            System.Windows.Forms.MessageBox.Show("Jim Tile Loader for Jim Farm \nCreated by Allan Legemaate 2016 for ADS Games \nhttp://adsgames.net");
+        }
+
+        private void saveXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Save xml to file
+            XElement tiles = new XElement("tiles");
+
+            // Go through tiles and then save
+            for (int i = 0; i < allTiles.Count; i++)
+            {
+                // Comments
+                XComment newTileComment = new XComment(allTiles.ElementAt(i).name.ToUpper());
+
+                // Add comment to xml file
+                tiles.Add(newTileComment);
+
+                // Add all the data into a xml tile
+                XElement newTile =
+                    new XElement("tile",
+                        new XAttribute("id", allTiles.ElementAt(i).id),
+                        new XElement("name", allTiles.ElementAt(i).name),
+                        new XElement("images",
+                            new XElement("image_x", allTiles.ElementAt(i).img_x.ToString()),
+                            new XElement("image_y", allTiles.ElementAt(i).img_y.ToString()),
+                            new XElement("image_h", allTiles.ElementAt(i).img_h.ToString()),
+                            new XElement("image_w", allTiles.ElementAt(i).img_w.ToString())
+                        ),
+
+                        new XElement("attrubite", allTiles.ElementAt(i).attribute.ToString()),
+                        new XElement("random", "0"),
+                        new XElement("script", "")
+                    );
+
+                // Add data to xml file
+                tiles.Add(newTile);
+            }
+
+            // Save to file
+            tiles.Save("newTIles.xml");
         }
     }
 }

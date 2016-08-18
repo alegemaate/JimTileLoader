@@ -79,9 +79,9 @@
             // lbTileSelect
             // 
             this.lbTileSelect.FormattingEnabled = true;
-            this.lbTileSelect.Location = new System.Drawing.Point(249, 43);
+            this.lbTileSelect.Location = new System.Drawing.Point(248, 27);
             this.lbTileSelect.Name = "lbTileSelect";
-            this.lbTileSelect.Size = new System.Drawing.Size(132, 147);
+            this.lbTileSelect.Size = new System.Drawing.Size(132, 121);
             this.lbTileSelect.TabIndex = 2;
             this.lbTileSelect.SelectedIndexChanged += new System.EventHandler(this.lbTileSelect_SelectedIndexChanged);
             // 
@@ -171,7 +171,7 @@
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(249, 195);
+            this.btnAdd.Location = new System.Drawing.Point(248, 152);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(61, 27);
             this.btnAdd.TabIndex = 10;
@@ -181,7 +181,7 @@
             // 
             // btnRemove
             // 
-            this.btnRemove.Location = new System.Drawing.Point(320, 196);
+            this.btnRemove.Location = new System.Drawing.Point(319, 152);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(61, 27);
             this.btnRemove.TabIndex = 11;
@@ -226,7 +226,7 @@
             // pbImage
             // 
             this.pbImage.BackColor = System.Drawing.Color.Transparent;
-            this.pbImage.Location = new System.Drawing.Point(12, 130);
+            this.pbImage.Location = new System.Drawing.Point(11, 114);
             this.pbImage.Name = "pbImage";
             this.pbImage.Size = new System.Drawing.Size(64, 64);
             this.pbImage.TabIndex = 16;
@@ -243,7 +243,7 @@
             this.gbImageSettings.Controls.Add(this.nudHeight);
             this.gbImageSettings.Controls.Add(this.lblImgCoordYTitle);
             this.gbImageSettings.Controls.Add(this.nudImgCoordX);
-            this.gbImageSettings.Location = new System.Drawing.Point(82, 123);
+            this.gbImageSettings.Location = new System.Drawing.Point(81, 107);
             this.gbImageSettings.Name = "gbImageSettings";
             this.gbImageSettings.Size = new System.Drawing.Size(161, 71);
             this.gbImageSettings.TabIndex = 17;
@@ -258,7 +258,7 @@
             this.gbBasic.Controls.Add(this.lblAttributeText);
             this.gbBasic.Controls.Add(this.lblNameTitle);
             this.gbBasic.Controls.Add(this.cbType);
-            this.gbBasic.Location = new System.Drawing.Point(13, 43);
+            this.gbBasic.Location = new System.Drawing.Point(12, 27);
             this.gbBasic.Name = "gbBasic";
             this.gbBasic.Size = new System.Drawing.Size(230, 74);
             this.gbBasic.TabIndex = 18;
@@ -269,6 +269,11 @@
             // 
             this.nudID.BackColor = System.Drawing.SystemColors.Window;
             this.nudID.Location = new System.Drawing.Point(166, 19);
+            this.nudID.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
             this.nudID.Name = "nudID";
             this.nudID.Size = new System.Drawing.Size(58, 20);
             this.nudID.TabIndex = 7;
@@ -320,8 +325,9 @@
             // saveXMLToolStripMenuItem
             // 
             this.saveXMLToolStripMenuItem.Name = "saveXMLToolStripMenuItem";
-            this.saveXMLToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
+            this.saveXMLToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveXMLToolStripMenuItem.Text = "Save XML";
+            this.saveXMLToolStripMenuItem.Click += new System.EventHandler(this.saveXMLToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
@@ -344,7 +350,7 @@
             // 
             // Form1
             // 
-            this.ClientSize = new System.Drawing.Size(390, 229);
+            this.ClientSize = new System.Drawing.Size(390, 189);
             this.Controls.Add(this.gbBasic);
             this.Controls.Add(this.gbImageSettings);
             this.Controls.Add(this.pbImage);
