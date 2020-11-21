@@ -20,9 +20,14 @@ namespace jimTileLoader
     {
         // Holds tiles
         List<tile> allTiles;
+        List<item> allItems;
 
         // The tile set
         Image tileSet;
+        Image itemSet;
+
+        // Images or tiles
+        bool tiles;
 
         // Index of the selected
         int selected_index = -1;
@@ -33,9 +38,11 @@ namespace jimTileLoader
             
             // Load our image
             tileSet = new Bitmap("images/tiles.png");
+            itemSet = new Bitmap("images/items.png");
 
             // New list
             allTiles = new List<tile>();
+            allItems = new List<item>();
         }
 
         // Check if ID value is used already
@@ -55,70 +62,123 @@ namespace jimTileLoader
         // Select something else from the list
         private void lbTileSelect_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (lbTileSelect.SelectedItem != null)
+            if (tiles)
             {
-                // Current selected tile
-                selected_index = lbTileSelect.Items.IndexOf(lbTileSelect.SelectedItem as object);
-
-                // Name
-                tbName.Text = allTiles.ElementAt(selected_index).name;
-
-                // Type
-                if (allTiles.ElementAt(selected_index).attribute == "NON_SOLID")
-                    cbType.SelectedIndex = 0;
-                else if (allTiles.ElementAt(selected_index).attribute == "SOLID")
-                    cbType.SelectedIndex = 1;
-
-                // Height & Width
-                nudHeight.Value = allTiles.ElementAt(selected_index).img_h;
-                nudWidth.Value = allTiles.ElementAt(selected_index).img_w;
-
-                // Img coords
-                nudImgCoordX.Value = allTiles.ElementAt(selected_index).img_x;
-                nudImgCoordY.Value = allTiles.ElementAt(selected_index).img_y;
-
-                // Unique ID
-                nudID.Value = allTiles.ElementAt(selected_index).id;
-
-                // Check if unique
-                if (!check_unique_id((int)nudID.Value, selected_index))
-                    nudID.BackColor = Color.Red;
-                else
-                    nudID.BackColor = Color.White;
-
-                // Draw images
-                if (allTiles != null && selected_index > -1)
+                if (lbTileSelect.SelectedItem != null)
                 {
-                    redraw_image();
+                    // Current selected tile
+                    selected_index = lbTileSelect.Items.IndexOf(lbTileSelect.SelectedItem as object);
+
+                    // Name
+                    tbName.Text = allTiles.ElementAt(selected_index).name;
+
+                    // Height & Width
+                    nudHeight.Value = allTiles.ElementAt(selected_index).height;
+                    nudWidth.Value = allTiles.ElementAt(selected_index).width;
+
+                    // Type
+                    if (allTiles.ElementAt(selected_index).attribute == "NON_SOLID")
+                        cbType.SelectedIndex = 0;
+                    else if (allTiles.ElementAt(selected_index).attribute == "SOLID")
+                        cbType.SelectedIndex = 1;
+
+                    // Special image types (animated and dynamic)
+                    nudTilesHigh.Value = allTiles.ElementAt(selected_index).img_sheet_h;
+                    nudTilesWide.Value = allTiles.ElementAt(selected_index).img_sheet_w;
+
+                    // Type of special
+                    if (allTiles.ElementAt(selected_index).img_type == "animated")
+                        rbAnimated.Checked = true;
+                    else if (allTiles.ElementAt(selected_index).img_type == "dynamic")
+                        rbDynamic.Checked = true;
+                    else
+                        rbNone.Checked = true;
+
+
+                    // Height & Width
+                    nudImgHeight.Value = allTiles.ElementAt(selected_index).img_h;
+                    nudImgWidth.Value = allTiles.ElementAt(selected_index).img_w;
+
+                    // Img coords
+                    nudImgCoordX.Value = allTiles.ElementAt(selected_index).img_x;
+                    nudImgCoordY.Value = allTiles.ElementAt(selected_index).img_y;
+
+                    // Unique ID
+                    nudID.Value = allTiles.ElementAt(selected_index).id;
+
+                    // Check if unique
+                    if (!check_unique_id((int)nudID.Value, selected_index))
+                        nudID.BackColor = Color.Red;
+                    else
+                        nudID.BackColor = Color.White;
+
+                    // Draw images
+                    if (allTiles != null && selected_index > -1)
+                    {
+                        redraw_image();
+                    }
+                }
+            }
+            else
+            {
+                if (lbTileSelect.SelectedItem != null)
+                {
+                    // Current selected tile
+                    selected_index = lbTileSelect.Items.IndexOf(lbTileSelect.SelectedItem as object);
+
+                    // Name
+                    tbName.Text = allItems.ElementAt(selected_index).name;
+
+                    // Img coords
+                    nudImgCoordX.Value = allItems.ElementAt(selected_index).img_x;
+                    nudImgCoordY.Value = allItems.ElementAt(selected_index).img_y;
+
+                    // Draw images
+                    if (allItems != null && selected_index > -1)
+                    {
+                        redraw_image();
+                    }
                 }
             }
         }
-
+        
         // Change width
-        private void nudWidth_ValueChanged(object sender, EventArgs e)
+        private void nudImgWidth_ValueChanged(object sender, EventArgs e)
         {
-            allTiles.ElementAt(selected_index).img_w = (int)nudWidth.Value;
+            if( tiles)
+                allTiles.ElementAt(selected_index).img_w = (int)nudImgWidth.Value;
+
             redraw_image();
         }
 
         // Change height
-        private void nudHeight_ValueChanged(object sender, EventArgs e)
+        private void nudImgHeight_ValueChanged(object sender, EventArgs e)
         {
-            allTiles.ElementAt(selected_index).img_h = (int)nudHeight.Value;
+            if (tiles)
+                allTiles.ElementAt(selected_index).img_h = (int)nudImgHeight.Value;
+
             redraw_image();
         }
 
         // Change img coord x
         private void nudImgCoordX_ValueChanged(object sender, EventArgs e)
         {
-            allTiles.ElementAt(selected_index).img_x = (int)nudImgCoordX.Value;
+            if (tiles)
+                allTiles.ElementAt(selected_index).img_x = (int)nudImgCoordX.Value;
+            else
+                allItems.ElementAt(selected_index).img_x = (int)nudImgCoordX.Value;
+
             redraw_image();
         }
 
         // Change img coord y
         private void nudImgCoordY_ValueChanged(object sender, EventArgs e)
         {
-            allTiles.ElementAt(selected_index).img_y = (int)nudImgCoordY.Value;
+            if (tiles)
+                allTiles.ElementAt(selected_index).img_y = (int)nudImgCoordY.Value;
+            else
+                allItems.ElementAt(selected_index).img_y = (int)nudImgCoordY.Value;
+
             redraw_image();
         }
 
@@ -130,9 +190,15 @@ namespace jimTileLoader
                 pbImage.Location.X, pbImage.Location.Y,
                 pbImage.Size.Width, pbImage.Size.Height);
 
-            RectangleF sourceRect = new RectangleF(
-                16 * allTiles.ElementAt(selected_index).img_x, 16 * allTiles.ElementAt(selected_index).img_y,
-                16 * allTiles.ElementAt(selected_index).img_w, 16 * allTiles.ElementAt(selected_index).img_h);
+
+            RectangleF sourceRect;
+            
+            if( tiles)
+                sourceRect = new RectangleF( 16 * allTiles.ElementAt(selected_index).img_x, 16 * allTiles.ElementAt(selected_index).img_y,
+                                             16 * allTiles.ElementAt(selected_index).img_w, 16 * allTiles.ElementAt(selected_index).img_h);
+            else
+                sourceRect = new RectangleF(16 * allItems.ElementAt(selected_index).img_x, 16 * allItems.ElementAt(selected_index).img_y,
+                                            16, 16);
 
             // Create a graphic class
             Graphics x = this.CreateGraphics();
@@ -141,14 +207,20 @@ namespace jimTileLoader
             x.InterpolationMode = InterpolationMode.NearestNeighbor;
 
             // Draw the current image
-            x.DrawImage(tileSet, destinationRect, sourceRect, GraphicsUnit.Pixel);
+            if (tiles)
+                x.DrawImage( tileSet, destinationRect, sourceRect, GraphicsUnit.Pixel);
+            else
+                x.DrawImage( itemSet, destinationRect, sourceRect, GraphicsUnit.Pixel);
         }
 
         // Change name
         private void tbName_TextChanged(object sender, EventArgs e)
         {
             // Change name
-            allTiles.ElementAt(selected_index).name = tbName.Text;
+            if( tiles)
+                allTiles.ElementAt(selected_index).name = tbName.Text;
+            else
+                allItems.ElementAt(selected_index).name = tbName.Text;
 
             // Change in list
             lbTileSelect.Items[selected_index] = tbName.Text;
@@ -158,29 +230,60 @@ namespace jimTileLoader
         private void cbType_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Type
-            allTiles.ElementAt(selected_index).attribute = cbType.Text;
+            if( tiles)
+                allTiles.ElementAt(selected_index).attribute = cbType.Text;
         }
 
         // Add tile
         private void btnAdd_Click(object sender, EventArgs e)
         {
-            // New tile
-            tile newTile = new tile();
+            if (tiles)
+            {
+                // New tile
+                tile newTile = new tile();
 
-            // Set vals
-            newTile.name = "NewTile";
-            newTile.attribute = "NON_SOLID";
+                // Set vals
+                newTile.name = "NewTile";
+                newTile.attribute = "NON_SOLID";
 
-            newTile.img_x = 0;
-            newTile.img_y = 0;
-            newTile.img_w = 1;
-            newTile.img_h = 1;
+                newTile.img_x = 0;
+                newTile.img_y = 0;
+                newTile.img_w = 1;
+                newTile.img_h = 1;
+                newTile.id = 0;
 
-            // Make new item for list box
-            lbTileSelect.Items.Add(newTile.name);
+                newTile.img_sheet_h = 1;
+                newTile.img_sheet_w = 1;
 
-            // Add to list
-            allTiles.Add(newTile);
+                newTile.width = 1;
+                newTile.height = 1;
+
+                newTile.img_type = "";
+
+                // Make new item for list box
+                lbTileSelect.Items.Add(newTile.name);
+
+                // Add to list
+                allTiles.Add(newTile);
+            }
+            else
+            {
+                // New item
+                item newItem = new item();
+
+                // Set vals
+                newItem.name = "NewItem";
+
+                newItem.img_x = 0;
+                newItem.img_y = 0;
+                newItem.value = 0;
+
+                // Make new item for list box
+                lbTileSelect.Items.Add(newItem.name);
+
+                // Add to list
+                allItems.Add(newItem);
+            }
         }
 
         // Remove tile
@@ -190,7 +293,10 @@ namespace jimTileLoader
             lbTileSelect.Items.RemoveAt(selected_index);
 
             // Remove from the list
-            allTiles.RemoveAt(selected_index);
+            if (tiles)
+                allTiles.RemoveAt(selected_index);
+            else
+                allItems.RemoveAt(selected_index);
 
             // Selected index in list box
             if (selected_index >= lbTileSelect.Items.Count)
@@ -205,18 +311,34 @@ namespace jimTileLoader
         private void nudID_ValueChanged(object sender, EventArgs e)
         {
             // Set new value in object
-            allTiles.ElementAt(selected_index).id = (int)nudID.Value;
+            if (tiles)
+            {
+                allTiles.ElementAt(selected_index).id = (int)nudID.Value;
 
-            // Check if unique
-            if (!check_unique_id((int)nudID.Value, selected_index))
-                nudID.BackColor = Color.Red;
-            else
-                nudID.BackColor = Color.White;
+                // Check if unique
+                if (!check_unique_id((int)nudID.Value, selected_index))
+                    nudID.BackColor = Color.Red;
+                else
+                    nudID.BackColor = Color.White;
+            }
         }
 
         // Load a tileset from xml
-        private void loadXMLToolStripMenuItem_Click(object sender, EventArgs e)
+        private void tilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // Tiles loaded
+            tiles = true;
+
+            // Disable value
+            nudValue.Enabled = false;
+            nudImgWidth.Enabled = true;
+            nudImgHeight.Enabled = true;
+            nudWidth.Enabled = true;
+            nudHeight.Enabled = true;
+            gbNebAware.Enabled = true;
+            nudID.Enabled = true;
+            cbType.Enabled = true;
+
             // Open dialog box
             string fileToOpen = "null";
 
@@ -247,14 +369,22 @@ namespace jimTileLoader
                     // New tile
                     tile newTile = new tile();
 
-                    // Set vals
+                    // Set vals   
                     newTile.name = item.Element("name").Value.ToString();
                     newTile.attribute = item.Element("attrubite").Value.ToString();
 
-                    newTile.img_x = Int32.Parse(item.Element("images").Element("image_x").Value.ToString());
-                    newTile.img_y = Int32.Parse(item.Element("images").Element("image_y").Value.ToString());
-                    newTile.img_w = Int32.Parse(item.Element("images").Element("image_w").Value.ToString());
-                    newTile.img_h = Int32.Parse(item.Element("images").Element("image_h").Value.ToString());
+                    newTile.width = Int32.Parse(item.Element("width").Value);
+                    newTile.height = Int32.Parse(item.Element("height").Value);
+
+                    newTile.img_type = item.Element("image").Attribute("type").Value.ToString();
+                    newTile.img_sheet_w = Int32.Parse(item.Element("image").Attribute("s_w").Value);
+                    newTile.img_sheet_h = Int32.Parse(item.Element("image").Attribute("s_h").Value);
+
+                    newTile.img_x = Int32.Parse(item.Element("image").Attribute("x").Value);
+                    newTile.img_y = Int32.Parse(item.Element("image").Attribute("y").Value);
+                    newTile.img_w = Int32.Parse(item.Element("image").Attribute("w").Value);
+                    newTile.img_h = Int32.Parse(item.Element("image").Attribute("h").Value);
+
                     newTile.id = Int32.Parse(item.Attribute("id").Value);
 
                     // Make new item for list box
@@ -295,16 +425,18 @@ namespace jimTileLoader
                     new XElement("tile",
                         new XAttribute("id", allTiles.ElementAt(i).id),
                         new XElement("name", allTiles.ElementAt(i).name),
-                        new XElement("images",
-                            new XElement("image_x", allTiles.ElementAt(i).img_x.ToString()),
-                            new XElement("image_y", allTiles.ElementAt(i).img_y.ToString()),
-                            new XElement("image_h", allTiles.ElementAt(i).img_h.ToString()),
-                            new XElement("image_w", allTiles.ElementAt(i).img_w.ToString())
+                        new XElement("width", allTiles.ElementAt(i).width),
+                        new XElement("height", allTiles.ElementAt(i).height),
+                        new XElement("image",
+                            new XAttribute("type", allTiles.ElementAt(i).img_type),
+                            new XAttribute("s_w", allTiles.ElementAt(i).img_sheet_w),
+                            new XAttribute("s_h", allTiles.ElementAt(i).img_sheet_h),
+                            new XAttribute("x", allTiles.ElementAt(i).img_x.ToString()),
+                            new XAttribute("y", allTiles.ElementAt(i).img_y.ToString()),
+                            new XAttribute("h", allTiles.ElementAt(i).img_h.ToString()),
+                            new XAttribute("w", allTiles.ElementAt(i).img_w.ToString())
                         ),
-
-                        new XElement("attrubite", allTiles.ElementAt(i).attribute.ToString()),
-                        new XElement("random", "0"),
-                        new XElement("script", "")
+                        new XElement("attrubite", allTiles.ElementAt(i).attribute.ToString())
                     );
 
                 // Add data to xml file
@@ -312,7 +444,121 @@ namespace jimTileLoader
             }
 
             // Save to file
-            tiles.Save("newTIles.xml");
+            tiles.Save("data/newTiles.xml");
+        }
+
+        // Change image extended type
+        private void rbNone_CheckedChanged(object sender, EventArgs e)
+        {
+            if (tiles)
+                allTiles.ElementAt(selected_index).img_type = "";
+        }
+
+        private void rbDynamic_CheckedChanged(object sender, EventArgs e)
+        {
+            if (tiles)
+                allTiles.ElementAt(selected_index).img_type = "dynamic";
+        }
+
+        private void rbAnimated_CheckedChanged(object sender, EventArgs e)
+        {
+            if (tiles)
+                allTiles.ElementAt(selected_index).img_type = "animated";
+        }
+
+        private void rbMeta_CheckedChanged(object sender, EventArgs e)
+        {
+            if (tiles)
+                allTiles.ElementAt(selected_index).img_type = "meta_map";
+        }
+
+        // Change tilemap width
+        private void nudTilesWide_ValueChanged(object sender, EventArgs e)
+        {
+            if (tiles)
+                allTiles.ElementAt(selected_index).img_sheet_w = (int)nudTilesWide.Value;
+        }
+
+        // Change tilemap width
+        private void nudTilesHigh_ValueChanged(object sender, EventArgs e)
+        {
+            if (tiles)
+                allTiles.ElementAt(selected_index).img_sheet_h = (int)nudTilesHigh.Value;
+        }
+
+        private void nudWidth_ValueChanged(object sender, EventArgs e)
+        {
+            if (tiles)
+                allTiles.ElementAt(selected_index).width = (int)nudWidth.Value;
+        }
+
+        private void nudHeight_ValueChanged(object sender, EventArgs e)
+        {
+            if( tiles)
+                allTiles.ElementAt(selected_index).height = (int)nudHeight.Value;
+        }
+
+        private void itemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Tiles loaded
+            tiles = false;
+
+            // Disable value
+            nudValue.Enabled = true;
+            nudImgWidth.Enabled = false;
+            nudImgHeight.Enabled = false;
+            nudWidth.Enabled = false;
+            nudHeight.Enabled = false;
+            gbNebAware.Enabled = false;
+            nudID.Enabled = false;
+            cbType.Enabled = false;
+
+            // Open dialog box
+            string fileToOpen = "null";
+
+            DialogResult result = ofdOpenFile.ShowDialog(); // Show the dialog.
+            if (result == DialogResult.OK) // Test result.
+                fileToOpen = ofdOpenFile.FileName;
+
+            // Make sure its loading
+            if (fileToOpen != "null")
+            {
+                // Our container for the xml document
+                // Load from a static location (for now)
+                XDocument xdoc = XDocument.Load(fileToOpen);
+
+                // Number of tiles
+                int count = xdoc.Descendants("tile").Count();
+
+                // Clear list
+                lbTileSelect.Items.Clear();
+
+                // Change id color
+                nudID.BackColor = Color.White;
+
+                // Load data into all tiles
+                int counter = 0;
+                foreach (XElement item in xdoc.Descendants("item"))
+                {
+                    // New newItem
+                    item newItem = new item();
+
+                    // Set vals   
+                    newItem.name = item.Element("name").Value.ToString();
+                    newItem.value = Int32.Parse(item.Element("value").Value);
+                    newItem.img_x = Int32.Parse(item.Element("image").Attribute("x").Value);
+                    newItem.img_y = Int32.Parse(item.Element("image").Attribute("y").Value);
+
+                    // Make new item for list box
+                    lbTileSelect.Items.Add(newItem.name);
+
+                    // Add to list
+                    allItems.Add(newItem);
+
+                    // Inc counter
+                    counter++;
+                }
+            }
         }
     }
 }
